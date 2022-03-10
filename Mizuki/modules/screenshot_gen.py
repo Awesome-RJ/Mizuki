@@ -35,7 +35,7 @@ from Mizuki.utils.help_Nekmo_ffmpeg import generate_screen_shots
 async def generate_screen_shot(bot, update):
     TRChatBase(update.from_user.id, update.text, "generatescss")
     if update.reply_to_message is not None:
-        download_location = DOWNLOAD_LOCATION + "/"
+        download_location = f'{DOWNLOAD_LOCATION}/'
         a = await bot.send_message(
             chat_id=update.chat.id,
             text=Translation.DOWNLOAD_START,
@@ -54,9 +54,7 @@ async def generate_screen_shot(bot, update):
                 chat_id=update.chat.id,
                 message_id=a.message_id,
             )
-            tmp_directory_for_each_user = (
-                DOWNLOAD_LOCATION + "/" + str(update.from_user.id)
-            )
+            tmp_directory_for_each_user = f'{DOWNLOAD_LOCATION}/{str(update.from_user.id)}'
             if not os.path.isdir(tmp_directory_for_each_user):
                 os.makedirs(tmp_directory_for_each_user)
             images = await generate_screen_shots(

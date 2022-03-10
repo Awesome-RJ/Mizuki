@@ -114,8 +114,7 @@ def check_flood(update, context) -> str:
 @bot_admin
 def flood_button(update: Update, context: CallbackContext):
     query = update.callback_query
-    match = re.match(r"unmute_flooder\((.+?)\)", query.data)
-    if match:
+    if match := re.match(r"unmute_flooder\((.+?)\)", query.data):
         user_id = match.group(1)
         chat = update.effective_chat.id
         bot = context.bot
@@ -257,25 +256,21 @@ def flood(update, context):
 
     limit = sql.get_flood_limit(chat_id)
     if limit == 0:
-        if conn:
-            text = msg.reply_text(
+        text = msg.reply_text(
                 "I'm not enforcing any flood control in {}!".format(chat_name)
+            ) if conn else msg.reply_text("I'm not enforcing any flood control here!")
+    elif conn:
+        text = msg.reply_text(
+            "I'm currently restricting members after {} consecutive messages in {}.".format(
+                limit, chat_name
             )
-        else:
-            text = msg.reply_text("I'm not enforcing any flood control here!")
+        )
     else:
-        if conn:
-            text = msg.reply_text(
-                "I'm currently restricting members after {} consecutive messages in {}.".format(
-                    limit, chat_name
-                )
+        text = msg.reply_text(
+            "I'm currently restricting members after {} consecutive messages.".format(
+                limit
             )
-        else:
-            text = msg.reply_text(
-                "I'm currently restricting members after {} consecutive messages.".format(
-                    limit
-                )
-            )
+        )
 
 
 @run_async

@@ -50,12 +50,8 @@ def github(update, context):
 
         for x, y in usr.items():
             if x in whitelist:
-                if x in difnames:
-                    x = difnames[x]
-                else:
-                    x = x.title()
-
-                if x == "Account created at" or x == "Last updated":
+                x = difnames[x] if x in difnames else x.title()
+                if x in ["Account created at", "Last updated"]:
                     y = datetime.strptime(y, "%Y-%m-%dT%H:%M:%SZ")
 
                 if y not in goaway:

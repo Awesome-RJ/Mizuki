@@ -14,9 +14,7 @@ Heroku = heroku3.from_key(HEROKU_API_KEY)
 async def _(event):
     if event.fwd_from:
         return
-    if event.sender_id == OWNER_ID:
-        pass
-    else:
+    if event.sender_id != OWNER_ID:
         return
     await event.edit("**Restarted Mizuki 👀**")
     try:

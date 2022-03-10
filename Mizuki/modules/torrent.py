@@ -26,7 +26,7 @@ async def tor_search(event):
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36"
     }
     search_str = event.pattern_match.group(1)
-    tahike = await event.reply("Searching for " + search_str + "...")
+    tahike = await event.reply(f"Searching for {search_str}...")
     if " " in search_str:
         search_str = search_str.replace(" ", "+")
         print(search_str)
@@ -37,8 +37,10 @@ async def tor_search(event):
         )
     else:
         res = requests.get(
-            "https://www.torrentdownloads.me/search/?search=" + search_str, headers
+            f"https://www.torrentdownloads.me/search/?search={search_str}",
+            headers,
         )
+
     source = bs(res.text, "lxml")
     urls = []
     magnets = []
@@ -51,11 +53,7 @@ async def tor_search(event):
             title = title[20:]
             titles.append(title)
             urls.append("https://www.torrentdownloads.me" + div.p.a["href"])
-        except KeyError:
-            pass
-        except TypeError:
-            pass
-        except AttributeError:
+        except (KeyError, TypeError, AttributeError):
             pass
         if counter == 15:
             break
